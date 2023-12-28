@@ -47,6 +47,9 @@ db.contact.belongsTo(db.user, {
 db.books = require("./book")(sequelize, DataTypes);
 db.issue = require("./issue")(sequelize, DataTypes);
 
+db.user.belongsToMany(db.books, { through: "UserBooks" });
+db.books.belongsToMany(db.user, { through: "UserBooks" });
+
 sequelize.sync({ force: false });
 
 // User.sync(); // create a new user tabl
