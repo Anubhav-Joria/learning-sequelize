@@ -7,11 +7,12 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
         //   defaultValue: "John"
-      }, 
+      },
       phoneNumber: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
+      user_id: DataTypes.INTEGER, // should be like userId for default assocation
     },
     {
       // Other model options go here

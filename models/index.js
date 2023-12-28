@@ -24,6 +24,21 @@ db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 db.user = require("./users")(sequelize, DataTypes);
 db.contact = require("./contacts")(sequelize, DataTypes);
+
+db.user.hasOne(db.contact);
+db.contact.belongsTo(db.user);
+
+db.user.hasOne(db.contact, {
+  foreignKey: {
+    name: "user_id",
+  },
+}); // To get contact with users
+db.contact.belongsTo(db.user, {
+  foreignKey: {
+    name: "user_id",
+  },
+}); // To get users with contact
+
 db.books = require("./book")(sequelize, DataTypes);
 db.issue = require("./issue")(sequelize, DataTypes);
 
