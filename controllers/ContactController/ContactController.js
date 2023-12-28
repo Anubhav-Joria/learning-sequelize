@@ -52,7 +52,34 @@ const getContact = async (req, res) => {
   });
 };
 
+const getContactOneToMany = async (req, res) => {
+  let response = {};
+  try {
+    // Query to get User with their Associated Columns
+    response = await User.findAll({
+      attributes: ["firstName", "lastName"],
+      include: [
+        {
+          model: Contact,
+          attributes: ["address", "phoneNumber"],
+        },
+      ],
+    });
+  } catch (err) {
+    return res.json({
+      status: 200,
+      Error: err,
+    });
+  }
+
+  return res.json({
+    status: 200,
+    response,
+  });
+};
+
 module.exports = {
   createContact,
   getContact,
+  getContactOneToMany,
 };

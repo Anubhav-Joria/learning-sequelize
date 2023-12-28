@@ -1,0 +1,37 @@
+One to one vs One to many - The only difference will be in the structure, See below for understanding
+
+One to One response : 
+{
+    "firstName": "Virat",
+    "lastName": "Kohli",
+    "contact": {
+        "address": "13 Street",
+        "phoneNumber": 1234567899
+    }
+},
+{
+    "firstName": "Virat",
+    "lastName": "Kohli",
+    "contact": {
+        "address": "123 Main Street",
+        "phoneNumber": 1234567890
+    }
+},
+
+One to many response :
+{
+    "firstName": "Virat",
+    "lastName": "Kohli",
+    "contacts": [
+        {
+            "address": "13 Street",
+            "phoneNumber": 1234567899
+        },
+        {
+            "address": "123 Main Street",
+            "phoneNumber": 1234567890
+        }
+    ]
+},
+
+----------------------------------------------------------------------------------------
