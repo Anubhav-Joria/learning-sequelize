@@ -25,14 +25,19 @@ db.Sequelize = Sequelize;
 db.user = require("./users")(sequelize, DataTypes);
 db.contact = require("./contacts")(sequelize, DataTypes);
 
-db.user.hasOne(db.contact);
-db.contact.belongsTo(db.user);
+// db.user.hasOne(db.contact, {
+//   foreignKey: {
+//     name: "user_id",
+//   },
+// }); // To get contact with users
 
-db.user.hasOne(db.contact, {
+// one to Many relationship
+db.user.hasMany(db.contact, {
   foreignKey: {
     name: "user_id",
   },
 }); // To get contact with users
+
 db.contact.belongsTo(db.user, {
   foreignKey: {
     name: "user_id",
