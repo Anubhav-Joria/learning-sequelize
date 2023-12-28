@@ -2,10 +2,10 @@ module.exports = (sequelize, DataTypes) => {
   const Book = sequelize.define(
     "Book",
     {
-      book_id: {
+      id: {
         type: DataTypes.INTEGER,
-        primaryKey: true, 
-        autoIncrement: true, 
+        primaryKey: true,
+        autoIncrement: true,
       },
       title: {
         type: DataTypes.STRING,

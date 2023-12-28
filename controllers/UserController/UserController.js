@@ -1,6 +1,7 @@
 const { Sequelize } = require("sequelize");
 const db = require("../../models");
 const User = db.user;
+const Books = db.books;
 
 const CreateUser = async (req, res) => {
   const { firstName, lastName } = req.body;
@@ -132,6 +133,22 @@ const practiceQuery = async (req, res) => {
   return res.json(response);
 };
 
+const getUsersWithBooks = async (req, res) => {
+  const user = await User.findAll({
+    attributes: ["firstName", "lastName"],
+    include: [
+      {
+        model: Books,
+        attributes: ["id", "title", "price"],
+      },
+    ],
+  });
+  return res.json({
+    status: 200,
+    user: user,
+  });
+};
+
 module.exports = {
   CreateUser,
   ShowAllUsers,
@@ -140,4 +157,5 @@ module.exports = {
   deleteUser,
   updateUser,
   practiceQuery,
+  getUsersWithBooks,
 };
