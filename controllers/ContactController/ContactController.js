@@ -3,12 +3,20 @@ const User = db.user;
 const Contact = db.contact;
 
 const createContact = async (req, res) => {
-  let contact = await Contact.create(req.body);
-  return res.json({
-    status: 200,
-    message: "Contact created successfully",
-    contact: contact,
-  });
+  try {
+    let contacts = await Contact.bulkCreate(req.body);
+    return res.json({
+      status: 200,
+      message: "Contacts created successfully",
+      contacts: contacts,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: 500,
+      message: "Error creating contacts",
+      error: error.message,
+    });
+  }
 };
 
 const getContact = async (req, res) => {
@@ -78,8 +86,35 @@ const getContactOneToMany = async (req, res) => {
   });
 };
 
+const paranoid = async (req, res) => {
+  let response = {};
+  try {
+    // 1. Query to soft delete a contact
+    // response = await Contact.destroy({
+    //   where: {
+    //     id: 18,
+    //   },
+    //   force: true,
+    // });
+
+    // 2. Query to restore soft deleted contact
+    response = await Contact.restore();
+  } catch (err) {
+    return res.json({
+      status: 200,
+      Error: err,
+    });
+  }
+
+  return res.json({
+    status: 200,
+    response,
+  });
+};
+
 module.exports = {
   createContact,
   getContact,
   getContactOneToMany,
+  paranoid,
 };
