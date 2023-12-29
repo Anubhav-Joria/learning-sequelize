@@ -112,9 +112,38 @@ const paranoid = async (req, res) => {
   });
 };
 
+/**
+ * lazy load users and contacts
+ */
+const lazyLoading = async (req, res) => {
+  let response = {};
+  try {
+    let data = await User.findOne({
+      where: {
+        id: 2,
+      },
+    });
+
+    response = { ...response, user: data };
+    let contact = await data.getContacts();
+    response = { ...response, contact };
+  } catch (err) {
+    return res.json({
+      status: 200,
+      Error: err,
+    });
+  }
+
+  return res.json({
+    status: 200,
+    response,
+  });
+};
+
 module.exports = {
   createContact,
   getContact,
   getContactOneToMany,
   paranoid,
+  lazyLoading,
 };
