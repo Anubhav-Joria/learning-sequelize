@@ -21,6 +21,7 @@ module.exports = (sequelize, DataTypes) => {
       // can also use like
       createdAt: true,
       updatedAt: "modifiedAt",
+      paranoid: true, // Added the paranoid option for soft deletes, means it will still be visible in the table with deletedAt not null
     }
   );
   return Contact;
