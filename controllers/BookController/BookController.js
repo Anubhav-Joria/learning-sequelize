@@ -1,6 +1,8 @@
 const { Sequelize } = require("sequelize");
 const db = require("../../models");
 const Book = db.books;
+const User = db.user;
+const Contact = db.contact;
 
 const CreateBook = async (req, res) => {
   try {
@@ -24,9 +26,9 @@ const CreateBook = async (req, res) => {
 };
 
 const getBooks = async (req, res) => {
-  const {start, pageSize} = req?.query;
+  const { start, pageSize } = req?.query;
   const options = {};
-  if(start && pageSize){
+  if (start && pageSize) {
     options.offset = Number(start) - 1;
     options.limit = Number(pageSize);
   }
@@ -45,11 +47,40 @@ const getBooks = async (req, res) => {
   }
 };
 
+/**
+ * Query to get data from different tables
+ * @returns Books with Associated Users and their associated contact information
+ */
+const getBooksMetaData = async (req, res) => {
+  try {
+    const books = await Book.findAll({
+      attributes: ["title", "author", "price"],
+      include: {
+        model: User,
+        through: { attributes: [] }, // Exclude junction table data (UserBooks)
+
+        attributes: ["firstName", "lastName"],
+        include: {
+          model: Contact,
+          attributes: ["address", "phoneNumber"],
+        },
+      },
+    });
+    return res.json({
+      status: 200,
+      book: books,
+    });
+  } catch (err) {
+    return res.json({
+      status: 400,
+      error: err,
+    });
+  }
+};
 
 const PracticeOrderBy = async (req, res) => {
   try {
-
-    // 1 : 
+    // 1 :
     // const books = await Book.findAll({
     //   attributes: ["title", "price"],
     //   order: [
@@ -65,8 +96,6 @@ const PracticeOrderBy = async (req, res) => {
     //   ],
     //   group: 'price'
     // });
-
-    
 
     return res.json({
       status: 200,
@@ -84,5 +113,6 @@ const PracticeOrderBy = async (req, res) => {
 module.exports = {
   CreateBook,
   PracticeOrderBy,
-  getBooks
+  getBooks,
+  getBooksMetaData,
 };
