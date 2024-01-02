@@ -1,0 +1,37 @@
+See Sequelize documentation for better understanding
+
+
+Key points : 
+
+1. one Many-to-Many relationship isn't very different from two One-to-Many relationships.
+2. difference between two One-to-Many relationships and one Many-to-Many relationship - (the difference will be in accessing the data in difference combinations)
+
+
+// With the Many-to-Many approach, you can do:
+User.findAll({ include: Profile });
+Profile.findAll({ include: User });
+// However, you can't do:
+User.findAll({ include: Grant });
+Profile.findAll({ include: Grant });
+Grant.findAll({ include: User });
+Grant.findAll({ include: Profile });
+
+// On the other hand, with the double One-to-Many approach, you can do:
+User.findAll({ include: Grant });
+Profile.findAll({ include: Grant });
+Grant.findAll({ include: User });
+Grant.findAll({ include: Profile });
+// However, you can't do:
+User.findAll({ include: Profile });
+Profile.findAll({ include: User });
+// Although you can emulate those with nested includes, as follows:
+User.findAll({
+  include: {
+    model: Grant,
+    include: Profile
+  }
+}); // This emulates the `User.findAll({ include: Profile })`, however
+    // the resulting object structure is a bit different. The original
+    // structure has the form `user.profiles[].grant`, while the emulated
+    // structure has the form `user.grants[].profiles[]`.
+    
