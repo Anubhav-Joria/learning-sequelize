@@ -9,4 +9,5 @@ module.exports = (app) => {
   app.patch("/updateUser/:id", routes.updateUser);
   app.get("/practiceQuery", routes.practiceQuery);
   app.get("/getUsersWithBooks", routes.getUsersWithBooks);
+  app.get("/transaction", routes.transaction);
 };

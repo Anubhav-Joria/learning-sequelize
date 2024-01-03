@@ -149,6 +149,40 @@ const getUsersWithBooks = async (req, res) => {
   });
 };
 
+const transaction = async (req, res) => {
+  let t = await db.sequelize.transaction();
+  try {
+    // Then, we do some calls passing this transaction as an option:
+    const user = await User.create(
+      {
+        firstName: "James",
+        lastName: "Potter",
+      },
+      { transaction: t }
+    );
+
+    if (req.body?.length > 0) {
+      var book = await Books.bulkCreate({ ...req.body }, { transaction: t });
+    } else {
+      var book = await Books.create({ ...req.body }, { transaction: t });
+    }
+
+    await t.commit();
+    return res.json({
+      status: 200,
+      user: user,
+      book: book,
+    });
+  } catch (err) {
+    await t.rollback();
+
+    return res.json({
+      status: 200,
+      error: err,
+    });
+  }
+};
+
 module.exports = {
   CreateUser,
   ShowAllUsers,
@@ -158,4 +192,5 @@ module.exports = {
   updateUser,
   practiceQuery,
   getUsersWithBooks,
+  transaction,
 };
