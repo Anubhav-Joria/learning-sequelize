@@ -117,6 +117,14 @@ db.playerGameTeam.belongsTo(db.gameTeam);
 db.player.hasMany(db.playerGameTeam);
 db.gameTeam.hasMany(db.playerGameTeam);
 
+//Scopes
+db.books.addScope("expensive", {
+  where: {
+    price: {
+      [db.Sequelize.Op.gt]: 2500, // Using Sequelize's operators to specify 'price > 2000'
+    },
+  },
+});
 sequelize.sync({ force: false });
 
 // User.sync(); // create a new user tabl

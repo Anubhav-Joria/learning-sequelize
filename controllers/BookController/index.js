@@ -5,4 +5,5 @@ module.exports = (app) => {
   app.get("/orderBy", routes.PracticeOrderBy);
   app.get("/getBooks", routes.getBooks);
   app.get("/getBooksMetaData", routes.getBooksMetaData);
+  app.get("/getExpensiveBooks", routes.getExpensiveBooks);
 };
