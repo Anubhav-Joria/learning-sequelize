@@ -3,5 +3,6 @@ module.exports = (app) => {
   require("./BookController/index")(app);
   require("./IssueController/index")(app);
   require("./ContactController/index")(app);
+  require("./PlayerGameTeamController/index")(app);
   require("./CustomerController/index")(app);
 };

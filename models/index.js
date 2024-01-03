@@ -80,6 +80,43 @@ db.grant.belongsTo(db.customer);
 db.profile.hasMany(db.grant);
 db.grant.belongsTo(db.profile);
 
+// Many to many to many relationship
+db.player = sequelize.define("Player", { username: DataTypes.STRING });
+db.team = sequelize.define("Team", { name: DataTypes.STRING });
+db.game = sequelize.define("Game", { name: DataTypes.STRING });
+
+// Super Many-to-Many relationship between Game and Team
+db.gameTeam = sequelize.define("GameTeam", {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+    allowNull: false,
+  },
+});
+db.team.belongsToMany(db.game, { through: db.gameTeam });
+db.game.belongsToMany(db.team, { through: db.gameTeam });
+db.gameTeam.belongsTo(db.game);
+db.gameTeam.belongsTo(db.team);
+db.game.hasMany(db.gameTeam);
+db.team.hasMany(db.gameTeam);
+
+// Super Many-to-Many relationship between Player and GameTeam
+db.playerGameTeam = sequelize.define("PlayerGameTeam", {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+    allowNull: false,
+  },
+});
+db.player.belongsToMany(db.gameTeam, { through: db.playerGameTeam });
+db.gameTeam.belongsToMany(db.player, { through: db.playerGameTeam });
+db.playerGameTeam.belongsTo(db.player);
+db.playerGameTeam.belongsTo(db.gameTeam);
+db.player.hasMany(db.playerGameTeam);
+db.gameTeam.hasMany(db.playerGameTeam);
+
 sequelize.sync({ force: false });
 
 // User.sync(); // create a new user tabl
