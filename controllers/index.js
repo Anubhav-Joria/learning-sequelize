@@ -4,4 +4,5 @@ module.exports = (app) => {
   require("./IssueController/index")(app);
   require("./ContactController/index")(app);
   require("./PlayerGameTeamController/index")(app);
+  require("./CustomerController/index")(app);
 };

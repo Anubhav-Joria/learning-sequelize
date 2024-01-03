@@ -24,6 +24,8 @@ db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 db.user = require("./users")(sequelize, DataTypes);
 db.contact = require("./contacts")(sequelize, DataTypes);
+db.customer = require("./customer")(sequelize, DataTypes);
+db.profile = require("./profile")(sequelize, DataTypes);
 
 // db.user.hasOne(db.contact, {
 //   foreignKey: {
@@ -49,6 +51,34 @@ db.issue = require("./issue")(sequelize, DataTypes);
 
 db.user.belongsToMany(db.books, { through: "UserBooks" });
 db.books.belongsToMany(db.user, { through: "UserBooks" });
+
+const Grant = sequelize.define(
+  "grant",
+  {
+    selfGranted: DataTypes.BOOLEAN,
+  },
+  { timestamps: false }
+);
+
+db.grant = Grant;
+
+// 1. Many-to-Many association
+// db.customer.belongsToMany(db.profile, { through: Grant });
+// db.profile.belongsToMany(db.customer, { through: Grant });
+
+// 2. Two One-to-Many Association
+// db.customer.hasMany(db.grant);
+// db.grant.belongsTo(db.customer);
+// db.profile.hasMany(db.grant);
+// db.grant.belongsTo(db.profile);
+
+// 3. The Super Many-to-Many relationship
+db.customer.belongsToMany(db.profile, { through: db.grant });
+db.profile.belongsToMany(db.customer, { through: db.grant });
+db.customer.hasMany(db.grant);
+db.grant.belongsTo(db.customer);
+db.profile.hasMany(db.grant);
+db.grant.belongsTo(db.profile);
 
 // Many to many to many relationship
 db.player = sequelize.define("Player", { username: DataTypes.STRING });
