@@ -25,7 +25,32 @@ module.exports = (sequelize, DataTypes) => {
       // can also use like
       createdAt: true,
       updatedAt: "modifiedAt",
+
+      // 1. Defining hooks
+      // hooks: {
+      //   beforeValidate: (user, options) => {
+      //     console.log("beforeValidate", user);
+      //     user.firstName = "happy";
+      //   },
+      //   afterValidate: (user, options) => {
+      //     console.log("afterValidate", user);
+      //     user.lastName = "prince";
+      //   },
+      // },
     }
   );
+
+  // Method 2
+  // User.addHook("beforeValidate", "customName", (user, options) => {
+  //   user.firstName = "sad";
+  //   user.lastName = "King";
+  // });
+
+  // Method - 3
+  User.beforeValidate((user, options) => {
+    user.firstName = "Great";
+    user.lastName = "King";
+  });
+
   return User;
 };
