@@ -110,9 +110,26 @@ const PracticeOrderBy = async (req, res) => {
   }
 };
 
+const getExpensiveBooks = async (req, res) => {
+  try {
+    const books = await Book.scope("expensive").findAll({});
+    return res.json({
+      status: 200,
+      book: books,
+    });
+  } catch (err) {
+    return res.json({
+      status: 400,
+      message: "Unsuccessful creating book",
+      error: err.parent.sqlMessage,
+    });
+  }
+};
+
 module.exports = {
   CreateBook,
   PracticeOrderBy,
   getBooks,
   getBooksMetaData,
+  getExpensiveBooks,
 };
